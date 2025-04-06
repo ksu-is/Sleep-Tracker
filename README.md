@@ -1,5 +1,5 @@
 <div align="center">
-# Sleep-Tracker-And-More
+Sleep-Tracker-And-More
 
 # To-do list items needed to complete:
 # Personalized introduction (First page)
