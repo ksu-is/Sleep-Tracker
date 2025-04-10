@@ -6,3 +6,5 @@
 # Tailored suggestions and encouragement based on the user’s school-work-life balance to help improve sleep quality. Perhaps add a "How are you feeling from 1-10" in different categories
 # Journal Entry vibes
 # Relaxation suggestions vibe... Would we be able to link music?
+
+# I dont think we'd be able to link music, but defintely worth looking into I know it helps me sleep
