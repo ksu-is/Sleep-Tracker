@@ -1,0 +1,13 @@
+ from datetime import datetime
+
+# Discuss which web framework we should use
+
+class WellnessEntry:
+    def __init__(self, date, sleep_hours, mood, notes=""):
+        self.date = date
+        self.sleep_hours = sleep_hours
+        self.mood = mood
+        self.notes = notes
+
+    def __str__(self):
+        return f"{self.date} | Sleep: {self.sleep_hours} hrs | Mood: {self.mood} | Notes: {self.notes}"

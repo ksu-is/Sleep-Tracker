@@ -13,8 +13,4 @@ Coders: Jmen Seso & Kylen Willis
 # Tailored suggestions and encouragement based on the user’s school-work-life balance to help improve sleep quality. Perhaps add a "How are you feeling from 1-10" in different categories
 # Journal Entry vibes
 # Relaxation suggestions vibe... Would we be able to link music?
-
-
 # For the README.md: Make it look neat and pretty. Add more details later after code is complete. Possibly add a features category, overview of the project... Will Add more to the to-do list
-
-</p>
