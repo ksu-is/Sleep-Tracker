@@ -9,3 +9,7 @@ def open_weekly_goals():
 
 goal_entry = tk.Entry(goals_win, font=("Helvetica", 12), width=30)
     goal_entry.pack(pady=10)
+
+ # Listbox to display goals
+    goal_listbox = tk.Listbox(goals_win, font=("Helvetica", 12), width=40, height=10)
+    goal_listbox.pack(pady=10)
