@@ -1,1 +1,48 @@
-lol
+def open_weekly_goals():
+    goals_win = tk.Toplevel()
+    goals_win.title("Weekly Goals")
+    goals_win.geometry("400x500")
+    goals_win.configure(bg="#393e46")
+
+    title = tk.Label(goals_win, text="Weekly Goals", font=("Helvetica", 16, "bold"), fg="white", bg="#393e46")
+    title.pack(pady=10)
+
+    goal_entry = tk.Entry(goals_win, font=("Helvetica", 12), width=30)
+    goal_entry.pack(pady=10)
+
+    # Listbox to display goals
+    goal_listbox = tk.Listbox(goals_win, font=("Helvetica", 12), width=40, height=10)
+    goal_listbox.pack(pady=10)
+
+    # Load saved goals
+    try:
+        with open("weekly_goals.txt", "r") as f:
+            for line in f:
+                goal_listbox.insert(tk.END, line.strip())
+    except FileNotFoundError:
+        pass
+
+    # Add goal function
+    def add_goal():
+        goal = goal_entry.get().strip()
+        if goal:
+            goal_listbox.insert(tk.END, goal)
+            with open("weekly_goals.txt", "a") as f:
+                f.write(goal + "\n")
+            goal_entry.delete(0, tk.END)
+
+    # Mark selected goal as complete
+    def mark_complete():
+        selected = goal_listbox.curselection()
+        if selected:
+            index = selected[0]
+            current = goal_listbox.get(index)
+            if not current.startswith("[✓] "):
+                goal_listbox.delete(index)
+                goal_listbox.insert(index, "[✓] " + current)
+
+    add_button = tk.Button(goals_win, text="Add Goal", font=("Helvetica", 12), bg="#00adb5", fg="white", command=add_goal)
+    add_button.pack(pady=5)
+
+    complete_button = tk.Button(goals_win, text="Mark as Complete", font=("Helvetica", 12), bg="#00adb5", fg="white", command=mark_complete)
+    complete_button.pack(pady=5)
