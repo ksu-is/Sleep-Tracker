@@ -76,3 +76,23 @@ goals_button.pack(pady=10)
 
 # Run the window
 root.mainloop()
+
+#Log Out Button with Confirmation
+def log_off_confirmation():
+    confirmation = messagebox.askyesno("Confirm Action", "Are you sure you want to log off?")
+    if confirmation:
+        log_off()
+        
+def log_off():
+    main_screen.withdraw()
+    login_window.deiconify()
+
+#Buttons helped by ChatGPT
+# Log Off button (with confirmation)
+log_off_button = tk.Button(main_screen, text="Log Off", command=show_confirmation)
+log_off_button.pack(pady=10)
+
+# Start with the login screen visible
+login_window.mainloop()
+
+# Will find how to put buttons on this...
