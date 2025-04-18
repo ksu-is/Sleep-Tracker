@@ -5,6 +5,9 @@ Sleep-Tracker-And-More
 Coders: Jmen Seso & Kylen Willis
 </p>
 
+# **Project Overview**
+This project is designed to help students improve their sleep habits and overall wellness. By logging users' sleeping patterns, setting personalized goals, and providing insights on rest quality, the tracker encourages a balance between academic demands and self-care. Key features include sleep logging, setting weekly goals, and routine check-ins to optimize study-rest cycles. This project promotes users' sleep schedules, fueling better focus, energy, and academic success.
+
 # To-do list items needed to complete:
 
 <p align="left">
