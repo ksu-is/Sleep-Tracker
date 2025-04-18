@@ -15,7 +15,20 @@ def open_journal():
 
 # 4.17 Updated Journal Entry Page to add ways for user to journal and save their entry
 
+def save_entry():
+    entry_text = text_area.get("1.0",tk.END).strip() # Get user text
+    if entry_text:
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S") # learned about tkinter timestamp library
+        with open("journal_entries.txt", "a") as file:
+            write.file(timestamp + ": " + entry_tet + "\n")
+    print("Entry Saved!")
+    text_area.delete("1.0",tk.END) # Clear entry after saving to an archive
+    else:
+        print("No entry to save. Please write an entry!")
+ 
+
 #For Journal Entry Still need to
+ # Archived saved messages
  # Delete Archived messages aka burn it
  # Make things look nicer... if have time.
 
