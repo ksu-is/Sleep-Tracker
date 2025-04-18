@@ -17,3 +17,9 @@ goal_entry = tk.Entry(goals_win, font=("Helvetica", 12), width=30)
 
     calendar_label = tk.Label(goals_win, text="Select Due Date:", font=("Helvetica", 12), fg="white", bg="#393e46")
     calendar_label.pack()
+
+cal = Calendar(goals_win, selectmode="day", date_pattern="yyyy-mm-dd")
+    cal.pack(pady=5)
+
+    goal_listbox = tk.Listbox(goals_win, font=("Helvetica", 12), width=40, height=10)
+    goal_listbox.pack(pady=10)
