@@ -23,3 +23,9 @@ cal = Calendar(goals_win, selectmode="day", date_pattern="yyyy-mm-dd")
 
     goal_listbox = tk.Listbox(goals_win, font=("Helvetica", 12), width=40, height=10)
     goal_listbox.pack(pady=10)
+
+# Attemp to load saved goals
+    try:
+        with open("weekly_goals.txt", "r") as f:
+            for line in f:
+                goal_listbox.insert(tk.END, line.strip())
