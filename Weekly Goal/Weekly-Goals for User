@@ -3,3 +3,6 @@ def open_weekly_goals():
     goals_win.title("Weekly Goals")
     goals_win.geometry("400x500")
     goals_win.configure(bg="#393e46")
+
+ title = tk.Label(goals_win, text="Weekly Goals", font=("Helvetica", 16, "bold"), fg="white", bg="#393e46")
+    title.pack(pady=10)
