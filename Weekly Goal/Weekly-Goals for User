@@ -6,3 +6,6 @@ def open_weekly_goals():
 
  title = tk.Label(goals_win, text="Weekly Goals", font=("Helvetica", 16, "bold"), fg="white", bg="#393e46")
     title.pack(pady=10)
+
+goal_entry = tk.Entry(goals_win, font=("Helvetica", 12), width=30)
+    goal_entry.pack(pady=10)
