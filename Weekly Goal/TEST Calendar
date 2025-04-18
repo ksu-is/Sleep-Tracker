@@ -2,3 +2,9 @@
 
 pip install tkcalendar
 
+# Some assistance with the calendar formating from ChatGPT
+def open_weekly_goals():
+    goals_win = tk.Toplevel()
+    goals_win.title("Weekly Goals")
+    goals_win.geometry("400x600")
+    goals_win.configure(bg="#393e46")
