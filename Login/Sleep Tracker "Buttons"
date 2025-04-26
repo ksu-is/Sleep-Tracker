@@ -25,7 +25,48 @@ def save_entry():
     text_area.delete("1.0",tk.END) # Clear entry after saving to an archive
     else:
         print("No entry to save. Please write an entry!")
- 
+
+# Save entry to a file
+def save_entry():
+    entry = text_area.get("1.0", tk.END).strip()
+    if entry:
+        file = open("journal.txt", "a")
+        file.write(entry + "\n")
+        file.close()
+        listbox.insert(tk.END, entry)  # Add to archive list
+        text_area.delete("1.0", tk.END)
+        print("Entry saved.")
+    else:
+        print("Please type something!")
+
+# Delete selected entry from the list
+def delete_entry():
+    selected = listbox.curselection()
+    if selected:
+        listbox.delete(selected[0])
+        print("Entry deleted.")
+
+# Window
+window = tk.Tk()
+window.title("Simple Journal")
+
+# Text area
+text_area = tk.Text(window, width=40, height=5)
+text_area.pack(pady=10)
+
+# Save button
+save_button = tk.Button(window, text="Save Entry", command=save_entry)
+save_button.pack()
+
+# Archive list
+listbox = tk.Listbox(window, width=40, height=6)
+listbox.pack(pady=10)
+
+# Delete button
+delete_button = tk.Button(window, text="Delete Selected", command=delete_entry)
+delete_button.pack()
+
+window.mainloop()
 
 #For Journal Entry Still need to
  # Archived saved messages
