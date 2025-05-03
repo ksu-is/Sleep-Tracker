@@ -73,9 +73,6 @@ window.mainloop()
  # Delete Archived messages aka burn it
  # Make things look nicer... if have time.
 
-def open_night_music():
-    messagebox.showinfo("Night Music", "Opening Night Music...")
-
 def open_weekly_goals():
     messagebox.showinfo("Weekly Goals", "Opening Weekly Goals...")
 
@@ -105,11 +102,6 @@ journal_button = tk.Button(root, text="3 - Journal", font=("Helvetica", 14),
                            bg="#00adb5", fg="white", padx=20, pady=10, command=open_journal)
 journal_button.pack(pady=10)
 
-# Night Music button
-music_button = tk.Button(root, text="4 - Night Music", font=("Helvetica", 14), 
-                         bg="#00adb5", fg="white", padx=20, pady=10, command=open_night_music)
-music_button.pack(pady=10)
-
 # Weekly Goals button
 goals_button = tk.Button(root, text="5 - Weekly Goals", font=("Helvetica", 14), 
                          bg="#00adb5", fg="white", padx=20, pady=10, command=open_weekly_goals)
@@ -128,7 +120,6 @@ def log_off():
     main_screen.withdraw()
     login_window.deiconify()
 
-#Buttons helped by ChatGPT
 # Log Off button (with confirmation)
 log_off_button = tk.Button(main_screen, text="Log Off", command=show_confirmation)
 log_off_button.pack(pady=10)
