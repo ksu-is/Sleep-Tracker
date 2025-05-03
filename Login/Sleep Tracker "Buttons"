@@ -7,8 +7,79 @@ import datetime
 def open_sleep_tracker():
     messagebox.showinfo("Sleep Tracker", "Opening Sleep Tracker...")
 
-def open_mood_tracker():
-    messagebox.showinfo("Mood Tracker", "Opening Mood Tracker...")
+import pandas as pd
+from datetime import datetime, timedelta
+import random as rng
+
+# Customize night sleep hours
+night_start_hour = 21  # 9 PM
+night_end_hour = 7     # 7 AM
+
+def is_nighttime(hour):
+    return (hour >= night_start_hour or hour <= night_end_hour)
+
+def add_sleep_entry_to_dataset(df_sleep):
+    latest_row = df_sleep.iloc[-1].copy()
+    previous_sleep_end = latest_row['Sleep End']
+    
+    # Simulate fixed awake period (e.g., 16 hours)
+    awake_time = 16 * 60  # in minutes
+    sleep_start = previous_sleep_end + pd.to_timedelta(awake_time, unit='minutes')
+
+    # Determine sleep type
+    if is_nighttime(sleep_start.hour):
+        sleep_type = 'nighttime'
+        sleep_duration = int(rng.normalvariate(480, 30))  # around 8 hours
+    else:
+        sleep_type = 'nap'
+        sleep_duration = int(rng.normalvariate(30, 10))  # average 30 min nap
+
+    sleep_end = sleep_start + pd.to_timedelta(sleep_duration, unit='minutes')
+
+    new_index = df_sleep.index[-1] + 1
+    df_sleep.loc[new_index] = {
+        'Sleep Start': sleep_start,
+        'Sleep End': sleep_end,
+        'Sleep Type': sleep_type
+    }
+df_sleep = pd.DataFrame([{
+    'Sleep Start': pd.Timestamp("2025-05-01 23:00"),
+    'Sleep End': pd.Timestamp("2025-05-02 07:00"),
+    'Sleep Type': 'nighttime'
+}])
+
+# Tkinter main window
+root = tk.Tk()
+root.title("Adult Sleep Tracker")
+
+# Layout
+frame = tk.Frame(root)
+frame.pack(padx=10, pady=10)
+
+tk.Label(frame, text="Sleep Start (YYYY-MM-DD HH:MM):").grid(row=0, column=0, sticky="w")
+start_entry = tk.Entry(frame, width=25)
+start_entry.grid(row=0, column=1)
+
+tk.Label(frame, text="Sleep End (YYYY-MM-DD HH:MM):").grid(row=1, column=0, sticky="w")
+end_entry = tk.Entry(frame, width=25)
+end_entry.grid(row=1, column=1)
+
+add_button = tk.Button(frame, text="Add Sleep Entry", command=add_sleep)
+add_button.grid(row=2, column=0, columnspan=2, pady=5)
+
+# Treeview to display sleep logs
+tree = ttk.Treeview(root, columns=("Start", "End", "Duration"), show="headings")
+tree.heading("Start", text="Sleep Start")
+tree.heading("End", text="Sleep End")
+tree.heading("Duration", text="Duration (hrs)")
+tree.pack(padx=10, pady=10, fill="both", expand=True)
+
+# Scrollbar
+scrollbar = ttk.Scrollbar(root, orient="vertical", command=tree.yview)
+tree.configure(yscroll=scrollbar.set)
+scrollbar.pack(side="right", fill="y")
+
+root.mainloop()
 
 def open_journal():
     messagebox.showinfo("Journal", "Opening Journal...")
@@ -21,8 +92,8 @@ def save_entry():
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S") # learned about tkinter timestamp library
         with open("journal_entries.txt", "a") as file:
             write.file(timestamp + ": " + entry_tet + "\n")
-    print("Entry Saved!")
-    text_area.delete("1.0",tk.END) # Clear entry after saving to an archive
+        print("Entry Saved!")
+        text_area.delete("1.0",tk.END) # Clear entry after saving to an archive
     else:
         print("No entry to save. Please write an entry!")
 
@@ -92,10 +163,6 @@ sleep_button = tk.Button(root, text="1 - Sleep Tracker", font=("Helvetica", 14),
                          bg="#00adb5", fg="white", padx=20, pady=10, command=open_sleep_tracker)
 sleep_button.pack(pady=10)
 
-# Mood Tracker button
-mood_button = tk.Button(root, text="2 - Mood Tracker", font=("Helvetica", 14), 
-                        bg="#00adb5", fg="white", padx=20, pady=10, command=open_mood_tracker)
-mood_button.pack(pady=10)
 
 # Journal button
 journal_button = tk.Button(root, text="3 - Journal", font=("Helvetica", 14), 
