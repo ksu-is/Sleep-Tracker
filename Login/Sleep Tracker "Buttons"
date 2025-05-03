@@ -1,58 +1,118 @@
-#Help use choose which part of the sleep tracker to go to
+#Login/Register Screen for user
 
 import tkinter as tk
-from tkinter import messagebox, scrolledtext
-import datetime
+from tkinter import messagebox
 
-def open_sleep_tracker():
-    messagebox.showinfo("Sleep Tracker", "Opening Sleep Tracker...")
+# Test storage for user accounts
+user_accounts = {}
 
-import pandas as pd
-from datetime import datetime, timedelta
-import random as rng
-
-# Customize night sleep hours
-night_start_hour = 21  # 9 PM
-night_end_hour = 7     # 7 AM
-
-def is_nighttime(hour):
-    return (hour >= night_start_hour or hour <= night_end_hour)
-
-def add_sleep_entry_to_dataset(df_sleep):
-    latest_row = df_sleep.iloc[-1].copy()
-    previous_sleep_end = latest_row['Sleep End']
+def create_account():
+    username = username_entry.get()
+    password = password_entry.get()
     
-    # Simulate fixed awake period (e.g., 16 hours)
-    awake_time = 16 * 60  # in minutes
-    sleep_start = previous_sleep_end + pd.to_timedelta(awake_time, unit='minutes')
-
-    # Determine sleep type
-    if is_nighttime(sleep_start.hour):
-        sleep_type = 'nighttime'
-        sleep_duration = int(rng.normalvariate(480, 30))  # around 8 hours
+    if username in user_accounts:
+        messagebox.showerror("Error", "Username already exists.")
+    elif not username or not password:
+        messagebox.showerror("Error", "Please fill out both fields.")
     else:
-        sleep_type = 'nap'
-        sleep_duration = int(rng.normalvariate(30, 10))  # average 30 min nap
+        user_accounts[username] = password
+        messagebox.showinfo("Success", "Account created for " + username + "!")
 
-    sleep_end = sleep_start + pd.to_timedelta(sleep_duration, unit='minutes')
+def login():
+    username = username_entry.get()
+    password = password_entry.get()
+    
+    if username in user_accounts and user_accounts[username] == password:
+        messagebox.showinfo("Welcome", "Welcome back, " + username + "!")
+        root.destroy()  # Would transition to main app
+    else:
+        messagebox.showerror("Error", "Invalid username or password.")
 
-    new_index = df_sleep.index[-1] + 1
-    df_sleep.loc[new_index] = {
-        'Sleep Start': sleep_start,
-        'Sleep End': sleep_end,
-        'Sleep Type': sleep_type
-    }
-df_sleep = pd.DataFrame([{
-    'Sleep Start': pd.Timestamp("2025-05-01 23:00"),
-    'Sleep End': pd.Timestamp("2025-05-02 07:00"),
-    'Sleep Type': 'nighttime'
-}])
-
-# Tkinter main window
+# Create main window
 root = tk.Tk()
-root.title("Adult Sleep Tracker")
+root.title("Sleep Tracker - Login")
+root.geometry("400x400")
+root.configure(bg="#393e46")
 
-# Layout
+# Title label
+title_label = tk.Label(root, text="Sleep Tracker", 
+                       font=("Helvetica", 20, "bold"), fg="#eeeeee", bg="#393e46")
+title_label.pack(pady=20)
+
+# Username label + entry
+username_label = tk.Label(root, text="Username", font=("Helvetica", 12), fg="#eeeeee", bg="#393e46")
+username_label.pack(pady=5)
+username_entry = tk.Entry(root, font=("Helvetica", 12))
+username_entry.pack(pady=5)
+
+# Password label + entry
+password_label = tk.Label(root, text="Password", font=("Helvetica", 12), fg="#eeeeee", bg="#393e46")
+password_label.pack(pady=5)
+password_entry = tk.Entry(root, font=("Helvetica", 12), show="*")
+password_entry.pack(pady=5)
+
+# Login button
+login_button = tk.Button(root, text="Login", font=("Helvetica", 12), bg="#00adb5", fg="white", command=login)
+login_button.pack(pady=10)
+
+# Create Account button
+create_button = tk.Button(root, text="Create Account", font=("Helvetica", 12), bg="#00adb5", fg="white", command=create_account)
+create_button.pack(pady=5)
+
+# Run the window
+root.mainloop()
+
+#Help use choose which part of the sleep tracker to go to
+#pip install pandas
+
+import tkinter as tk
+from tkinter import ttk, messagebox, scrolledtext
+import pandas as pd
+from datetime import datetime
+
+# DataFrame to store sleep entries
+df_sleep = pd.DataFrame(columns=["Sleep Start", "Sleep End", "Sleep Type"])
+
+# Define nighttime based on hour
+def is_nighttime(hour):
+    return hour >= 21 or hour < 7
+
+# Function to add entry from user input
+def add_sleep():
+    global df_sleep
+    start_str = start_entry.get()
+    end_str = end_entry.get()
+
+    try:
+        sleep_start = datetime.strptime(start_str, "%Y-%m-%d %H:%M")
+        sleep_end = datetime.strptime(end_str, "%Y-%m-%d %H:%M")
+
+        if sleep_end <= sleep_start:
+            messagebox.showerror("Error", "Sleep end must be after sleep start.")
+            return
+
+        sleep_type = "nighttime" if is_nighttime(sleep_start.hour) else "nap"
+        duration_hours = round((sleep_end - sleep_start).total_seconds() / 3600, 2)
+
+        df_sleep.loc[len(df_sleep)] = [sleep_start, sleep_end, sleep_type]
+
+        # Add to tree view
+        tree.insert("", "end", values=(
+            sleep_start.strftime("%Y-%m-%d %H:%M"),
+            sleep_end.strftime("%Y-%m-%d %H:%M"),
+            duration_hours
+        ))
+
+        start_entry.delete(0, tk.END)
+        end_entry.delete(0, tk.END)
+        messagebox.showinfo("Success", "Entry added.")
+    except ValueError:
+        messagebox.showerror("Format Error", "Please use format: YYYY-MM-DD HH:MM")
+
+# GUI Setup
+root = tk.Tk()
+root.title("Manual Sleep Tracker")
+
 frame = tk.Frame(root)
 frame.pack(padx=10, pady=10)
 
@@ -67,14 +127,12 @@ end_entry.grid(row=1, column=1)
 add_button = tk.Button(frame, text="Add Sleep Entry", command=add_sleep)
 add_button.grid(row=2, column=0, columnspan=2, pady=5)
 
-# Treeview to display sleep logs
 tree = ttk.Treeview(root, columns=("Start", "End", "Duration"), show="headings")
 tree.heading("Start", text="Sleep Start")
 tree.heading("End", text="Sleep End")
 tree.heading("Duration", text="Duration (hrs)")
 tree.pack(padx=10, pady=10, fill="both", expand=True)
 
-# Scrollbar
 scrollbar = ttk.Scrollbar(root, orient="vertical", command=tree.yview)
 tree.configure(yscroll=scrollbar.set)
 scrollbar.pack(side="right", fill="y")
